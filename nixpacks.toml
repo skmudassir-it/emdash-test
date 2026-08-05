@@ -1,6 +1,5 @@
 # Added by Hermes migration (2026-08-04)
-# Repo has pnpm-lock.yaml but no workspace packages -> pnpm build breaks.
-# Force npm for install + build.
+# Astro app -> needs Node >=22.12. Repo has pnpm-lock without workspace -> force npm.
 [phases.install]
 commands = ["npm install --no-audit --no-fund"]
 
@@ -8,4 +7,4 @@ commands = ["npm install --no-audit --no-fund"]
 cmds = ["npm run build"]
 
 [variables]
-NIXPACKS_NODE_VERSION = "20"
+NIXPACKS_NODE_VERSION = "22"
