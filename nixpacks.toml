@@ -1,5 +1,5 @@
 # Added by Hermes migration (2026-08-04)
-# Astro app -> needs Node >=22.12.0; nixpacks Node 22 = 22.11 (too old) -> use 23.
+# Astro app -> needs Node >=22.12.0. nixpacks v1.41 supports 18/20/22/24 (NOT 23).
 [phases.install]
 commands = ["npm install --no-audit --no-fund"]
 
@@ -7,4 +7,4 @@ commands = ["npm install --no-audit --no-fund"]
 cmds = ["npm run build"]
 
 [variables]
-NIXPACKS_NODE_VERSION = "23"
+NIXPACKS_NODE_VERSION = "24"
