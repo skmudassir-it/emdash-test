@@ -1,16 +1,15 @@
-FROM node:24-slim AS builder
-RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ && rm -rf /var/lib/apt/lists/*
+# Build stage: compile static site (Astro / Vite / plain static)
+FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json* ./
-RUN npm install --no-audit --no-fund
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build
 
-FROM node:24-slim
-WORKDIR /app
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-RUN npm install --no-audit --no-fund --omit=dev serve
+# Runtime: tiny nginx
+FROM nginx:1.27-alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+RUN sed -i 's/listen\s*80;/listen 3000;/' /etc/nginx/conf.d/default.conf \
+    && sed -i 's/listen\s*\[::\]:80;/listen [::]:3000;/' /etc/nginx/conf.d/default.conf
 EXPOSE 3000
-CMD ["npx", "serve", "dist", "-l", "3000"]
+CMD ["nginx", "-g", "daemon off;"]
