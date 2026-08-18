@@ -1,5 +1,5 @@
 # Build stage: compile Astro SSR (node adapter) with pnpm
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 RUN corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -8,7 +8,7 @@ COPY . .
 RUN pnpm run build
 
 # Runtime: node serving the Astro standalone output
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
