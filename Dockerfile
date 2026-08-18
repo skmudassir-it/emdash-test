@@ -1,6 +1,6 @@
 # Build stage: compile Astro SSR (node adapter) with pnpm
 FROM node:24-alpine AS builder
-RUN corepack enable && corepack prepare pnpm@9 --activate
+RUN apk add --no-cache python3 make g++ && corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
